@@ -13,3 +13,4 @@ openpyxl>=3.1.5
 weasyprint>=65.1
 python-docx>=1.1.2
 python-dotenv>=1.0.1
+pycryptodome>=3.17  # Added this instead of pycrypto
