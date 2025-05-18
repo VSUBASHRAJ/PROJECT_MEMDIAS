@@ -234,7 +234,7 @@ def add_memory():
                     filename = secure_filename(file.filename)
                     file_path = f"images/{current_user.id}/{str(uuid.uuid4())}_{filename}"
                     storage.child(file_path).put(file)
-                    media_path = storage.child(file_path).get_url()
+                    media_path = storage.child(file_path).get_url(current_user.token)
             
             elif media_type == 'video' and 'video' in request.files:
                 file = request.files['video']
@@ -243,7 +243,7 @@ def add_memory():
                     filename = secure_filename(file.filename)
                     file_path = f"videos/{current_user.id}/{str(uuid.uuid4())}_{filename}"
                     storage.child(file_path).put(file)
-                    media_path = storage.child(file_path).get_url()
+                    media_path = storage.child(file_path).get_url(current_user.token)
             
             elif media_type == 'audio' and 'audio' in request.files:
                 file = request.files['audio']
@@ -252,7 +252,7 @@ def add_memory():
                     filename = secure_filename(file.filename)
                     file_path = f"audios/{current_user.id}/{str(uuid.uuid4())}_{filename}"
                     storage.child(file_path).put(file)
-                    media_path = storage.child(file_path).get_url()
+                    media_path = storage.child(file_path).get_url(current_user.token)
             
             # Create memory object
             memory = {
