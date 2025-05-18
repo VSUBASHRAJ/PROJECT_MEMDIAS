@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory Diary - Edit Memory</title>
+    
+    <!-- Bootstrap CSS - Replit Theme -->
+    <link rel="stylesheet" href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css">
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* Custom Styles */
+        :root {
+            --transition-speed: 0.3s;
+        }
+        
+        body {
+            transition: background-color var(--transition-speed);
+        }
+        
+        .voice-input-btn .fa-microphone.recording {
+            color: #ff0000;
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container py-4">
+        <header class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="mb-0">Memory Diary</h1>
+            <div>
+                <a href="{{ url_for('view_memory', memory_id=memory.id) }}" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left me-2"></i>Back to Memory
+                </a>
+                
+                <!-- User dropdown menu -->
+                <div class="dropdown d-inline-block">
+                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        {{ current_user.email }}
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="{{ url_for('profile') }}"><i class="fas fa-user me-2"></i>My Profile</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </header>
+
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-primary text-white">
+                        <h2 class="mb-0 fs-4">Edit Memory</h2>
+                    </div>
+                    <div class="card-body">
+                        {% if error %}
+                        <div class="alert alert-danger">{{ error }}</div>
+                        {% endif %}
+                        
+                        <form action="{{ url_for('edit_memory', memory_id=memory.id) }}" method="POST">
+                            <div class="mb-3">
+                                <label for="title" class="form-label">Title</label>
+                                <div class="input-group">
+                                    <input type="text" id="title" name="title" class="form-control" value="{{ memory.title }}" required>
+                                    <button type="button" class="btn btn-outline-secondary voice-input-btn" data-target="title">
+                                        <i class="fas fa-microphone"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="content" class="form-label">Content</label>
+                                <div class="input-group">
+                                    <textarea id="content" name="content" class="form-control" rows="4" required>{{ memory.content }}</textarea>
+                                    <button type="button" class="btn btn-outline-secondary voice-input-btn" data-target="content">
+                                        <i class="fas fa-microphone"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="date" class="form-label">Date</label>
+                                    <input type="date" id="date" name="date" class="form-control" value="{{ memory.date }}" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="time" class="form-label">Time</label>
+                                    <input type="time" id="time" name="time" class="form-control" value="{{ memory.time }}" required>
+                                </div>
+                            </div>
+                            
+                            {% if memory.media and memory.media_type %}
+                            <div class="mb-3">
+                                <label class="form-label">Current Media</label>
+                                <div class="border rounded p-3">
+                                    {% if memory.media_type == 'image' %}
+                                    <div>
+                                        <div class="mb-2">
+                                            <label for="image-size" class="form-label">Image Size:</label>
+                                            <input type="range" class="form-range" id="image-size" min="50" max="100" value="80" step="5">
+                                            <span id="image-size-value">80%</span>
+                                        </div>
+                                        <img src="{{ memory.media }}" alt="Memory image" class="img-fluid rounded" id="memory-image" style="max-width: 80%;">
+                                    </div>
+                                    {% elif memory.media_type == 'video' %}
+                                    <video src="{{ memory.media }}" controls class="img-fluid rounded"></video>
+                                    {% elif memory.media_type == 'audio' %}
+                                    <audio src="{{ memory.media }}" controls class="w-100"></audio>
+                                    {% endif %}
+                                </div>
+                                <div class="form-text">Media cannot be changed in edit mode. Create a new memory to add different media.</div>
+                                
+                                <div class="dropdown d-inline-block mt-2">
+                                    <button class="btn btn-sm btn-outline-success dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="fas fa-download me-1"></i> Download
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="{{ url_for('export_memory_pdf', memory_id=memory.id) }}" target="_blank"><i class="far fa-file-pdf me-2"></i>PDF</a></li>
+                                        <li><a class="dropdown-item" href="{{ url_for('export_memory_docx', memory_id=memory.id) }}" target="_blank"><i class="far fa-file-word me-2"></i>Word (DOCX)</a></li>
+                                        <li><a class="dropdown-item" href="{{ url_for('export_memory_xlsx', memory_id=memory.id) }}" target="_blank"><i class="far fa-file-excel me-2"></i>Excel (XLSX)</a></li>
+                                        <li><a class="dropdown-item" href="{{ url_for('export_memory_json', memory_id=memory.id) }}" target="_blank"><i class="far fa-file-code me-2"></i>JSON</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            {% endif %}
+                            
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save me-2"></i>Update Memory
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Set up voice input functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            setupVoiceInput();
+            
+            // Image size slider functionality
+            const imageSlider = document.getElementById('image-size');
+            if (imageSlider) {
+                const imageElement = document.getElementById('memory-image');
+                const sizeValueSpan = document.getElementById('image-size-value');
+                
+                imageSlider.addEventListener('input', function() {
+                    const sizeValue = this.value + '%';
+                    imageElement.style.maxWidth = sizeValue;
+                    sizeValueSpan.textContent = sizeValue;
+                });
+            }
+        });
+        
+        function setupVoiceInput() {
+            // Check if browser supports speech recognition
+            if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+                document.querySelectorAll('.voice-input-btn').forEach(btn => {
+                    btn.style.display = 'none';
+                });
+                return;
+            }
+            
+            // Initialize speech recognition
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            
+            document.querySelectorAll('.voice-input-btn').forEach(button => {
+                const targetId = button.getAttribute('data-target');
+                const targetElement = document.getElementById(targetId);
+                
+                let recognition = null;
+                let isRecording = false;
+                
+                button.addEventListener('click', function() {
+                    if (isRecording) {
+                        // Stop recording
+                        recognition.stop();
+                        button.classList.remove('btn-danger');
+                        button.classList.add('btn-outline-secondary');
+                        button.querySelector('i').classList.remove('recording');
+                        isRecording = false;
+                    } else {
+                        // Start recording
+                        recognition = new SpeechRecognition();
+                        recognition.continuous = true;
+                        recognition.interimResults = true;
+                        recognition.lang = 'en-US';
+                        
+                        // Remember initial text
+                        const initialText = targetElement.value;
+                        
+                        recognition.start();
+                        button.classList.remove('btn-outline-secondary');
+                        button.classList.add('btn-danger');
+                        button.querySelector('i').classList.add('recording');
+                        isRecording = true;
+                        
+                        // Process results
+                        recognition.onresult = function(event) {
+                            let finalTranscript = initialText;
+                            let interimTranscript = '';
+                            
+                            for (let i = event.resultIndex; i < event.results.length; i++) {
+                                const transcript = event.results[i][0].transcript;
+                                
+                                if (event.results[i].isFinal) {
+                                    finalTranscript += ' ' + transcript;
+                                } else {
+                                    interimTranscript += transcript;
+                                }
+                            }
+                            
+                            targetElement.value = finalTranscript + interimTranscript;
+                        };
+                        
+                        // Handle end of recognition
+                        recognition.onend = function() {
+                            if (isRecording) {
+                                recognition.start();
+                            }
+                        };
+                        
+                        // Handle errors
+                        recognition.onerror = function() {
+                            button.classList.remove('btn-danger');
+                            button.classList.add('btn-outline-secondary');
+                            button.querySelector('i').classList.remove('recording');
+                            isRecording = false;
+                        };
+                    }
+                });
+            });
+        }
+    </script>
+</body>
+</html>

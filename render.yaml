@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: memoryvault-app
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    envVars:
+      - key: SESSION_SECRET
+        fromEnvVar: SESSION_SECRET
+      - key: FIREBASE_API_KEY
+        fromEnvVar: FIREBASE_API_KEY
+      - key: FIREBASE_AUTH_DOMAIN
+        fromEnvVar: FIREBASE_AUTH_DOMAIN
+      - key: FIREBASE_PROJECT_ID
+        fromEnvVar: FIREBASE_PROJECT_ID
+      - key: FIREBASE_STORAGE_BUCKET
+        fromEnvVar: FIREBASE_STORAGE_BUCKET
+      - key: FIREBASE_MESSAGING_SENDER_ID
+        fromEnvVar: FIREBASE_MESSAGING_SENDER_ID
+      - key: FIREBASE_APP_ID
+        fromEnvVar: FIREBASE_APP_ID
+      - key: FIREBASE_DATABASE_URL
+        fromEnvVar: FIREBASE_DATABASE_URL
