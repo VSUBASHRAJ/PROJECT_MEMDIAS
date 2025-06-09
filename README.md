@@ -2,6 +2,7 @@
 
 **My Memory Diary** is a smart diary application that helps users capture and manage their memories with ease. It supports voice and text input, multimedia uploads, and powerful search and filter features — all packed into a clean, intuitive interface.
 
+🔗 **Live Demo**: [https://memdias.onrender.com/](https://memdias.onrender.com/)
 ---
 
 ## Features
