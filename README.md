@@ -1,6 +1,6 @@
 #  My Memory Diary
 
-**My Memory Diary** is a smart, AI-assisted diary application that helps users capture and manage their memories with ease. It supports voice and text input, multimedia uploads, and powerful search and filter features — all packed into a clean, intuitive interface.
+**My Memory Diary** is a smart diary application that helps users capture and manage their memories with ease. It supports voice and text input, multimedia uploads, and powerful search and filter features — all packed into a clean, intuitive interface.
 
 ---
 
