@@ -46,7 +46,7 @@
 ![Screenshot](https://github.com/user-attachments/assets/3bb14d14-b6f2-4265-ace4-9bb65b2d86d9)
 
 
-![Screenshot 2025-05-20 193115](https://github.com/user-attachments/assets/1f5c6f55-d927-4760-bcd6-774d9b1c170a)
+
 
 
 
