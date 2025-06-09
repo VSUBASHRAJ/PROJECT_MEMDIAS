@@ -40,7 +40,8 @@
 
 
 
-![Screenshot 2025-05-20 193002](https://github.com/user-attachments/assets/3324b8f1-6871-49be-8b68-26ce44fea634)
+![image](https://github.com/user-attachments/assets/2bd995e4-de0a-40ae-a5c2-8fc22ade06bb)
+
 
 
 
